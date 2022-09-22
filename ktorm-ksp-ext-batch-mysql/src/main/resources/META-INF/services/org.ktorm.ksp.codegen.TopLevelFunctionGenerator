@@ -1,0 +1,3 @@
+org.ktorm.ksp.ext.batch.mysql.EntitySequenceAddAllFunGenerator
+org.ktorm.ksp.ext.batch.mysql.EntitySequenceUpdateAllFunGenerator
+

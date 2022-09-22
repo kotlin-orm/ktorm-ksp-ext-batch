@@ -1,0 +1,36 @@
+[versions]
+kotlin = "1.6.21"
+googleKsp = "1.6.21-1.0.5"
+ktorm = "3.6.0-SNAPSHOT"
+ktorm-ksp = "1.0.0-SNAPSHOT"
+kotlinpoetKsp = "1.11.0"
+kotlinCompileTesting = "1.4.8"
+junit = "4.13.2"
+assertj = "3.22.0"
+testcontainers = "1.17.3"
+slf4j = "1.7.36"
+
+[libraries]
+gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+ktorm-core = { module = "org.ktorm:ktorm-core", version.ref = "ktorm" }
+ktorm-support-mysql = { module = "org.ktorm:ktorm-support-mysql", version.ref = "ktorm" }
+ktorm-support-oracle = { module = "org.ktorm:ktorm-support-oracle", version.ref = "ktorm" }
+ktorm-support-postgresql = { module = "org.ktorm:ktorm-support-postgresql", version.ref = "ktorm" }
+ktorm-support-sqlserver = { module = "org.ktorm:ktorm-support-sqlserver", version.ref = "ktorm" }
+ktorm-support-sqlite = { module = "org.ktorm:ktorm-support-sqlite", version.ref = "ktorm" }
+ktorm-ksp-api = { module = "org.ktorm:ktorm-ksp-api", version.ref = "ktorm-ksp" }
+ktorm-ksp-spi = { module = "org.ktorm:ktorm-ksp-spi", version.ref = "ktorm-ksp" }
+ktorm-ksp-compiler = { module = "org.ktorm:ktorm-ksp-compiler", version.ref = "ktorm-ksp" }
+
+testcontainers-msyql = { module = "org.testcontainers:mysql", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+
+ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "googleKsp" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+# Test libs
+kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version.ref = "kotlinCompileTesting" }
+kotlinCompileTesting-ksp = { module = "com.github.tschuchortdev:kotlin-compile-testing-ksp", version.ref = "kotlinCompileTesting" }
+junit = { module = "junit:junit", version.ref = "junit" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }

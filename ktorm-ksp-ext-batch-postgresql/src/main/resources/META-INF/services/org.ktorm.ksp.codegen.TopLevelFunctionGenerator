@@ -1,0 +1,3 @@
+org.ktorm.ksp.ext.batch.postgresql.EntitySequenceAddAllFunGenerator
+org.ktorm.ksp.ext.batch.postgresql.EntitySequenceUpdateAllFunGenerator
+

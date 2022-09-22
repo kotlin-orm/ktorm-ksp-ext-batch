@@ -1,0 +1,3 @@
+org.ktorm.ksp.ext.batch.sqlite.EntitySequenceAddAllFunGenerator
+org.ktorm.ksp.ext.batch.sqlite.EntitySequenceUpdateAllFunGenerator
+
