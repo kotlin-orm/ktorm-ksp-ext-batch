@@ -2,7 +2,7 @@ package org.ktorm.ext.batch.postgresql
 
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 public class PostgresqlBatchTest: BasePostgresqlTest() {
@@ -75,8 +75,8 @@ public class PostgresqlBatchTest: BasePostgresqlTest() {
                 """,
             )
         )
-        Assertions.assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
-        Assertions.assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
         result2.invokeBridge("addAll", database)
     }
 
@@ -146,8 +146,80 @@ public class PostgresqlBatchTest: BasePostgresqlTest() {
                 """,
             )
         )
-        Assertions.assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
-        Assertions.assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        result2.invokeBridge("addAll", database)
+    }
+
+    @Test
+    public fun `addAll disable nullAsDefaultValue`() {
+        val (result1, result2) = twiceCompile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+                import org.ktorm.ksp.api.*
+                import org.ktorm.entity.Entity
+                import org.ktorm.database.Database
+                import org.ktorm.entity.toList
+                import org.ktorm.dsl.inList
+                import org.ktorm.dsl.gt
+                import org.ktorm.entity.filter
+
+                @Table("t_department")
+                interface Department : Entity<Department> {
+                    @PrimaryKey
+                    val id: Int
+                    var name: String?
+                    var location: String?
+                    var number: Int?
+                }
+
+                @Table("t_employee")
+                data class Employee (
+                    @PrimaryKey
+                    val id: Int? = null,
+                    var name: String? = null,
+                    @Column("department_id")
+                    var departmentId: Int? = null
+                )
+
+                object TestBridge {
+                    fun addAll(database: Database) {
+                        var departments = listOf(
+                            Department(id = 1),
+                            Department(id = 2),
+                        )
+                        database.departments.addAll(departments, false)
+                        departments = database.departments.toList()
+                        assert(departments.size == 2)
+                        assert(departments[0].id == 1)
+                        assert(departments[1].id == 2)
+                        for (department in departments) {
+                            assert(department.name == null)
+                            assert(department.location == null)
+                            assert(department.number == null)
+                        }
+
+                        var employees = listOf(
+                            Employee(id = 1),
+                            Employee(id = 2),
+                        )
+                        database.employees.addAll(employees, false)
+                        employees = database.employees.toList()
+                        assert(employees.size == 2)
+                        assert(employees[0].id == 1)
+                        assert(employees[1].id == 2)
+                        for (employee in employees) {
+                            assert(employee.name == null)
+                            assert(employee.departmentId == null)
+                        }
+                    }
+                }
+                """,
+            )
+        )
+        assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
         result2.invokeBridge("addAll", database)
     }
 
@@ -210,8 +282,8 @@ public class PostgresqlBatchTest: BasePostgresqlTest() {
                 """,
             )
         )
-        Assertions.assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
-        Assertions.assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
         result2.invokeBridge("addAll", database)
     }
 
@@ -262,8 +334,8 @@ public class PostgresqlBatchTest: BasePostgresqlTest() {
                 """,
             )
         )
-        Assertions.assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
-        Assertions.assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
         result2.invokeBridge("updateAll", database)
     }
 }

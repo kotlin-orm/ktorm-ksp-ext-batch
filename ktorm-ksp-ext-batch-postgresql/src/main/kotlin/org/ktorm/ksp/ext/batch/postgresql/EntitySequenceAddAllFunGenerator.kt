@@ -34,13 +34,18 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
     override fun generate(context: TableGenerateContext): List<FunSpec> {
         val (table, _, _, _) = context
         val defaultValueDoc = if (table.ktormEntityType == KtormEntityType.ENTITY_INTERFACE) {
-            "When the inserted column is null or unassigned"
+            "When [nullAsDefaultValue] is true and the inserted column is null or unassigned"
         } else {
-            "When the inserted column is null"
+            "When [nullAsDefaultValue] is true and the inserted column is null"
         }
         val funSpec = FunSpec.builder("addAll")
             .receiver(EntitySequence::class.asClassName().parameterizedBy(table.entityClassName, table.tableClassName))
             .addParameter("entities", Iterable::class.asClassName().parameterizedBy(table.entityClassName))
+            .addParameter(
+                ParameterSpec.builder("nullAsDefaultValue", typeNameOf<Boolean>())
+                    .defaultValue("true")
+                    .build()
+            )
             .returns(typeNameOf<Int>())
             .addKdoc("""
                 Bulk insert the given entities into this sequence.             
@@ -76,10 +81,10 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
             add(
                 """
                 fun <T : Any> %T.setOrDefaultValue(column: %T<T>, value: T?) {
-                    if (value != null) {
-                        set(column, value)
-                    } else {
+                    if (nullAsDefaultValue && value == null) {
                         set(column, column.%M())
+                    } else {
+                        set(column, value)
                     }
                 }
                 
