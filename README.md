@@ -156,7 +156,7 @@ inserted result:
 When to use the ```default``` keyword?
 
 - The property value is ```null``` and the ```nullAsDefaultValue``` parameter value of the ```addAll``` method is ```true```
-- Unassigned property([What's Unassigned property](#What's Unassigned property))
+- Unassigned property. [What is Unassigned property](#what-is-unassigned-property)
 
 ## PostgreSQL
 
@@ -196,7 +196,7 @@ inserted result:
 When to use the ```default``` keyword?
 
 - The property value is ```null``` and the ```nullAsDefaultValue``` parameter value of the ```addAll``` method is ```true```
-- Unassigned property([What's Unassigned property](#What's Unassigned property))
+- Unassigned property. [What is Unassigned property](#what-is-unassigned-property)
 
 ## SQLite
 
@@ -250,7 +250,7 @@ inserted result:
 Through the ```on conflict replace``` statement, ```null``` will be automatically replaced with the default value of the 
 column when inserting, but the disadvantage is that this column must be ```not null```
 
-## What's Unassigned property
+## What is Unassigned property
 
 In ktorm, properties that are assigned property that are unassigned property have different effects on the generated SQL.
 Only the entity class based on the ```Entity``` interface has the concept of unassigned property. 
