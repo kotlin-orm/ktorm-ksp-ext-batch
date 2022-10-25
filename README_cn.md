@@ -17,7 +17,8 @@
 
 :us: [English](README.md) | :cn: 简体中文
 
-```ktorm-ksp```插件, 为实体类生成批处理操作函数(```addAll``` & ```updateAll```)
+```ktorm-ksp```插件, 为实体类生成批处理操作函数(```addAll``` & ```updateAll```) ```addAll```使用```bulkInsert```实现, 
+相比```database.batchInsert```拥有更好的性能
 
 支持的数据库列表:
 
