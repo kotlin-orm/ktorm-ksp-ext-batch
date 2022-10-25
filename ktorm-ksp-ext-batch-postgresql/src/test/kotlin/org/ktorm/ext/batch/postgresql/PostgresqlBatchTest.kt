@@ -338,4 +338,40 @@ public class PostgresqlBatchTest: BasePostgresqlTest() {
         assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
         result2.invokeBridge("updateAll", database)
     }
+
+    @Test
+    public fun `addAll and updateAll with keyword identifier`() {
+        val (result1, result2) = twiceCompile(
+            SourceFile.kotlin(
+                "source.kt",
+                """
+                import org.ktorm.ksp.api.*
+                import org.ktorm.entity.Entity
+                import org.ktorm.database.Database
+                import org.ktorm.entity.toList
+                import org.ktorm.dsl.inList
+                import org.ktorm.dsl.gt
+                import org.ktorm.entity.filter
+
+                @Table
+                interface Department : Entity<Department> {
+                    @PrimaryKey
+                    var id: Int
+                    var `class`: String
+                    var operator: String
+                }
+
+                @Table
+                data class Employee (
+                    @PrimaryKey
+                    val id: Int,
+                    var `class`: String,
+                    var operator: String
+                )
+                """,
+            )
+        )
+        assertThat(result1.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+        assertThat(result2.exitCode).isEqualTo(KotlinCompilation.ExitCode.OK)
+    }
 }

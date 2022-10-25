@@ -112,7 +112,7 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
                     column.propertyTypeName.copy(nullable = true)
                 }
                 addStatement(
-                    "setOrDefaultValue(it.%L,·entity.getColumnValue(it.%L.binding!!) as %T)",
+                    "setOrDefaultValue(it.%N,·entity.getColumnValue(it.%N.binding!!) as %T)",
                     column.tablePropertyName.simpleName,
                     column.entityPropertyName.simpleName,
                     valueType
@@ -120,9 +120,9 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
             } else {
                 val valueCode = CodeFactory.buildColumnValueCode(column)
                 if (column.isNullable) {
-                    addStatement("setOrDefaultValue(it.%L,·%L)", column.tablePropertyName.simpleName, valueCode)
+                    addStatement("setOrDefaultValue(it.%N,·%L)", column.tablePropertyName.simpleName, valueCode)
                 } else {
-                    addStatement("set(it.%L,·%L)", column.tablePropertyName.simpleName, valueCode)
+                    addStatement("set(it.%N,·%L)", column.tablePropertyName.simpleName, valueCode)
                 }
             }
         }

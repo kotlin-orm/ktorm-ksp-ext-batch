@@ -45,14 +45,19 @@ public object CodeFactory {
         )
     }
 
-    public fun buildColumnValueCode(column: ColumnDefinition): String {
-        val valueCode = if (column.isReferences) {
+    public fun buildColumnValueCode(column: ColumnDefinition): CodeBlock {
+        return if (column.isReferences) {
             val referenceColumn = column.referencesColumn!!
             val nullableOperator = if (column.isNullable) "?" else ""
             "entity.${column.entityPropertyName.simpleName}$nullableOperator.${referenceColumn.entityPropertyName.simpleName}"
+            CodeBlock.of(
+                "entity.%N%L.%N",
+                column.entityPropertyName.simpleName,
+                nullableOperator,
+                referenceColumn.entityPropertyName.simpleName
+            )
         } else {
-            "entity.${column.entityPropertyName.simpleName}"
+            CodeBlock.of("entity.%N", column.entityPropertyName.simpleName)
         }
-        return valueCode
     }
 }

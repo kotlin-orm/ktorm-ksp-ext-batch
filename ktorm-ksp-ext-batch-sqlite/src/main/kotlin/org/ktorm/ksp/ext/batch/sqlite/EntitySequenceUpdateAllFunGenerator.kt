@@ -60,16 +60,16 @@ public class EntitySequenceUpdateAllFunGenerator : TopLevelFunctionGenerator {
         for (column in table.columns) {
             if (!column.isPrimaryKey) {
                 val valueCode = CodeFactory.buildColumnValueCode(column)
-                addStatement("set(it.%L,·%L)", column.tablePropertyName.simpleName, valueCode)
+                addStatement("set(it.%N,·%L)", column.tablePropertyName.simpleName, valueCode)
             }
         }
         beginControlFlow("where")
         primaryKeys.forEachIndexed { index, column ->
             if (index == 0) {
                 val conditionTemperate = if (primaryKeys.size == 1) {
-                    "it.%L·%M·entity.%L%L"
+                    "it.%N·%M·entity.%N%L"
                 } else {
-                    "(it.%L·%M·entity.%L%L)"
+                    "(it.%N·%M·entity.%N%L)"
                 }
                 addStatement(
                     conditionTemperate,
@@ -80,7 +80,7 @@ public class EntitySequenceUpdateAllFunGenerator : TopLevelFunctionGenerator {
                 )
             } else {
                 addStatement(
-                    ".%M(it.%L·%M·entity.%L%L)",
+                    ".%M(it.%N·%M·entity.%N%L)",
                     andFun,
                     column.tablePropertyName.simpleName,
                     eqFun,

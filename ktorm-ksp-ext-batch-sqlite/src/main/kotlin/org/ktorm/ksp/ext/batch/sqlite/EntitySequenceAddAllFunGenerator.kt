@@ -60,14 +60,14 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
                     column.propertyTypeName.copy(nullable = true)
                 }
                 addStatement(
-                    "set(it.%L,·entity.getColumnValue(it.%L.binding!!) as %T)",
+                    "set(it.%N,·entity.getColumnValue(it.%N.binding!!) as %T)",
                     column.tablePropertyName.simpleName,
                     column.entityPropertyName.simpleName,
                     valueType
                 )
             } else {
                 val valueCode = CodeFactory.buildColumnValueCode(column)
-                addStatement("set(it.%L,·%L)", column.tablePropertyName.simpleName, valueCode)
+                addStatement("set(it.%N,·%L)", column.tablePropertyName.simpleName, valueCode)
             }
         }
         endControlFlow()
