@@ -110,6 +110,30 @@ ksp("org.ktorm.ktorm-ksp-ext-batch-postgresql:$ktorm_version") // PostgreSQL
 </project>  
 ```
 
+3. 编写实体代码
+```kotlin
+@Table
+public data class Customer(
+    @PrimaryKey
+    public var id: Int?,
+    public var name: String,
+    public var email: String?,
+)
+```
+生成的```addAll```和```updateAll```方法
+```kotln
+public fun EntitySequence<Customer, Customers>.addAll(
+    entities: Iterable<Customer>,
+    nullAsDefaultValue: Boolean = true
+): Int {
+  // 省略具体代码
+}
+
+public fun EntitySequence<Employee, Employees>.updateAll(entities: Iterable<Employee>): IntArray {
+  // 省略具体代码
+}
+```
+
 # 不同数据库方言实现
 
 ```addAll```函数在生成批量插入的SQL语句时, 为了尽量让```列默认值```、```列自增```生效, 并且由于不同SQL数据库的实现差异, 其生成的批量插入SQL语句也会有所不同. 下面会说明具体的生成方案.

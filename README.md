@@ -110,7 +110,29 @@ ksp("org.ktorm.ktorm-ksp-ext-batch-postgresql:$ktorm_version") // PostgreSQL
 </project>  
 ```
 
+3. write entity code
+```kotlin
+@Table
+public data class Customer(
+    @PrimaryKey
+    public var id: Int?,
+    public var name: String,
+    public var email: String?,
+)
+```
+Generated```addAll```and```updateAll```code
+```kotln
+public fun EntitySequence<Customer, Customers>.addAll(
+    entities: Iterable<Customer>,
+    nullAsDefaultValue: Boolean = true
+): Int {
+  // ...
+}
 
+public fun EntitySequence<Employee, Employees>.updateAll(entities: Iterable<Employee>): IntArray {
+  // ...
+}
+```
 
 # Database Dialects
 
@@ -270,7 +292,7 @@ public fun Department(
     name: String? = Undefined.of(),
     mixedCase: String? = Undefined.of()
 ) {
-    // ignore code
+    // ...
 }
 
 // Use the built-in factory method of ktorm to create an instance, at this time all properties are unassigned
