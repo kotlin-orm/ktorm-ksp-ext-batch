@@ -47,7 +47,7 @@ fun Project.configureMavenPublishing() {
                 version = project.version.toString()
                 pom {
                     name.set("${project.group}:${project.name}")
-                    description.set("Ktorm KSP extension to help generate boilerplate code.")
+                    description.set("ktorm-ksp plugin that generates batch operation functions (addAll & updateAll) for entity classes.")
                     url.set("https://www.ktorm.org")
                     licenses {
                         license {
@@ -56,9 +56,9 @@ fun Project.configureMavenPublishing() {
                         }
                     }
                     scm {
-                        url.set("https://github.com/kotlin-orm/ktorm-ksp")
-                        connection.set("scm:git:https://github.com/kotlin-orm/ktorm-ksp.git")
-                        developerConnection.set("scm:git:ssh://git@github.com/kotlin-orm/ktorm-ksp.git")
+                        url.set("https://github.com/kotlin-orm/ktorm-ksp-ext-batch")
+                        connection.set("scm:git:https://github.com/kotlin-orm/ktorm-ksp-ext-batch.git")
+                        developerConnection.set("scm:git:ssh://git@github.com:kotlin-orm/ktorm-ksp-ext-batch.git")
                     }
                     developers {
                         developer {
