@@ -17,7 +17,7 @@
 
 :us: [English](README.md) | :cn: 简体中文
 
-```ktorm-ksp```插件, 为实体类生成批处理操作函数(```addAll``` & ```updateAll```) ```addAll```使用```bulkInsert```实现, 
+```ktorm-ksp```插件, 为实体类生成批处理操作函数(```addAll``` & ```updateAll```) ```addAll```使用```bulkInsert```实现,
 相比```database.batchInsert```拥有更好的性能
 
 支持的数据库列表:
@@ -30,106 +30,124 @@
 
 1. 本插件依赖于```ktorm-ksp```, 需先在项目中添加```ktorm-ksp```的相关依赖配置
 2. 根据使用的数据库在```build.gradle```或```pom.xml```中添加以下其中一个插件依赖
+
 ```groovy
 // Groovy DSL
 dependencies {
-  ksp 'org.ktorm.ktorm-ksp-ext-batch-mysql:$ktorm_version' // MySQL
-  ksp 'org.ktorm.ktorm-ksp-ext-batch-sqlite:$ktorm_version'  // SQLite
-  ksp 'org.ktorm.ktorm-ksp-ext-batch-postgresql:$ktorm_version' // PostgreSQL
+    ksp 'org.ktorm.ktorm-ksp-ext-batch-mysql:$ktorm_version' // MySQL
+    ksp 'org.ktorm.ktorm-ksp-ext-batch-sqlite:$ktorm_version'  // SQLite
+    ksp 'org.ktorm.ktorm-ksp-ext-batch-postgresql:$ktorm_version' // PostgreSQL
 }
 ```
+
 ```kotlin
 // Kotlin DSL
 ksp("org.ktorm.ktorm-ksp-ext-batch-mysql:$ktorm_version") // MySQL
 ksp("org.ktorm.ktorm-ksp-ext-batch-sqlite:$ktorm_version")  // SQLite
 ksp("org.ktorm.ktorm-ksp-ext-batch-postgresql:$ktorm_version") // PostgreSQL
 ```
+
 ```xml
 <!-- maven -->
 <project>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-maven-plugin</artifactId>
-        <version>${kotlin.version}</version>
-        <configuration>
-          <compilerPlugins>
-            <compilerPlugin>ksp</compilerPlugin>
-          </compilerPlugins>
-          <sourceDirs>
-            <sourceDir>src/main/kotlin</sourceDir>
-            <sourceDir>target/generated-sources/ksp</sourceDir>
-          </sourceDirs>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.dyescape</groupId>
-            <artifactId>kotlin-maven-symbol-processing</artifactId>
-            <version>1.3</version>
-          </dependency>
-          <dependency>
-            <groupId>org.ktorm</groupId>
-            <artifactId>ktorm-ksp-compiler</artifactId>
-            <version>${ktorm_version}</version>
-          </dependency>
-          <!-- MySQL -->
-          <dependency>
-            <groupId>org.ktorm</groupId>
-            <artifactId>ktorm-ksp-ext-batch-mysql</artifactId>
-            <version>${ktorm_version}</version>
-          </dependency>
-          <!-- SQLite -->
-          <dependency>
-            <groupId>org.ktorm</groupId>
-            <artifactId>ktorm-ksp-ext-batch-sqlite</artifactId>
-            <version>${ktorm_version}</version>
-          </dependency>
-          <!-- PostgreSQL -->
-          <dependency>
-            <groupId>org.ktorm</groupId>
-            <artifactId>ktorm-ksp-ext-batch-postgresql</artifactId>
-            <version>${ktorm_version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <configuration>
+                    <compilerPlugins>
+                        <compilerPlugin>ksp</compilerPlugin>
+                    </compilerPlugins>
+                    <sourceDirs>
+                        <sourceDir>src/main/kotlin</sourceDir>
+                        <sourceDir>target/generated-sources/ksp</sourceDir>
+                    </sourceDirs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.dyescape</groupId>
+                        <artifactId>kotlin-maven-symbol-processing</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.ktorm</groupId>
+                        <artifactId>ktorm-ksp-compiler</artifactId>
+                        <version>${ktorm_version}</version>
+                    </dependency>
+                    <!-- MySQL -->
+                    <dependency>
+                        <groupId>org.ktorm</groupId>
+                        <artifactId>ktorm-ksp-ext-batch-mysql</artifactId>
+                        <version>${ktorm_version}</version>
+                    </dependency>
+                    <!-- SQLite -->
+                    <dependency>
+                        <groupId>org.ktorm</groupId>
+                        <artifactId>ktorm-ksp-ext-batch-sqlite</artifactId>
+                        <version>${ktorm_version}</version>
+                    </dependency>
+                    <!-- PostgreSQL -->
+                    <dependency>
+                        <groupId>org.ktorm</groupId>
+                        <artifactId>ktorm-ksp-ext-batch-postgresql</artifactId>
+                        <version>${ktorm_version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>  
 ```
 
-
-
 # 不同数据库方言实现
 
-```addAll```函数在生成批量插入的SQL语句时, 为了尽量保持```列默认值```、```自增主键```生效, 并且由于不同SQL数据库的实现差异, 其生成的批量插入SQL语句也会有所不同. 下面会说明具体的生成方案.
+```addAll```函数在生成批量插入的SQL语句时, 为了尽量让```列默认值```、```列自增```生效, 并且由于不同SQL数据库的实现差异, 其生成的批量插入SQL语句也会有所不同. 下面会说明具体的生成方案.
 
 ## MySQL
 
-MySQL在插入时由```default```关键字使用```列默认值```、```自增主键```
+MySQL在批量插入时使用```default```关键字让```列默认值```、```auto_increment```生效
 
 ```SQL
 create table employee
 (
     id   int(11) primary key auto_increment,
     age  int(11) default 18,
-    name varchar(32)
+    name varchar(32),
+    job  varchar(32)
 );
-
--- addAll生成语句
-insert into employee(id, age, name) values (default, default, 'jack');
 ```
+```kotlin
+// 使用addAll批量插入
+database.employees.addAll(
+  listOf(
+    Employee(id=null, age=null, name="jack", job=null),
+    Employee(id=null, age=null, name="luck", job=null),
+  )
+)
+```
+```SQL
+-- addAll生成SQL
+insert into employee(id, age, name, job)
+values (default, default, 'jack', default),
+       (default, default, 'luck', default);
+```
+插入结果:
 
-以上插入语句执行后, id值为```自增主键```生成值, age为```列默认值```18. 如果表列没有设置默认值并且列不是```not null```时, 使用```default```关键字最终会插入```null```值
+| id  | age | name | job  |
+|-----|-----|------|------|
+| 1   | 18  | jack | null |
+| 2   | 18  | luck | null |
 
 什么情况下会使用```default```关键字?
 
@@ -138,21 +156,38 @@ insert into employee(id, age, name) values (default, default, 'jack');
 
 ## PostgreSQL
 
-PostgreSQL在插入时由```default```关键字使用```列默认值```、```自增主键```
+PostgreSQL在批量插入时使用```default```关键字让```列默认值```、```serial```生效
 
 ```SQL
 create table employee
 (
     id   serial primary key,
     age  varchar(128) default 18,
-    name varchar(32)
+    name varchar(32),
+    job  varchar(32)
 );
-
--- addAll生成语句
-insert into Employee(id, age, name) values (default, default, 'jack');
 ```
+```kotlin
+// 使用addAll批量插入
+database.employees.addAll(
+  listOf(
+    Employee(id=null, age=null, name="jack", job=null),
+    Employee(id=null, age=null, name="luck", job=null),
+  )
+)
+```
+```SQL
+-- addAll生成SQL
+insert into employee(id, age, name, job)
+values (default, default, 'jack', default),
+       (default, default, 'luck', default);
+```
+插入结果:
 
-以上插入语句执行后, id值为```自增主键```生成值, age为```列默认值```18. 如果表列没有设置默认值并且列不是```not null```时, 使用```default```关键字最终会插入```null```值
+| id  | age | name | job  |
+|-----|-----|------|------|
+| 1   | 18  | jack | null |
+| 2   | 18  | luck | null |
 
 什么情况下会使用```default```关键字?
 
@@ -161,34 +196,56 @@ insert into Employee(id, age, name) values (default, default, 'jack');
 
 ## SQLite
 
-由于SQLite中不支持```default```关键字, 在插入语句中对于```未赋值```的字段, 只能使用```null```进行插入.
+由于SQLite中不支持```default```关键字, 在批量插入语句中对于```未赋值```的字段, 只能使用```null```进行插入.
 
-那么如何在批量插入时让```列默认值```、```自增主键```生效呢？
+那么如何在批量插入时让```列默认值```、```列自增```生效呢？
 
-- 自增主键
+- 列自增
 
-    SQLite允许插入值为```null```, 此时会自动生成自增主键值
+  SQLite允许插入值为```null```, 此时会自动生成值
 
 - 列默认值
 
-    插入值为```null```时默认值无法生效, 解决方法有两种: 1、如果实体类是data class, 那么我们可以代码层面为字段设置默认值. 2、
-创建表时对默认值列做一些处理, 请参考下面的SQL语句
-```SQL
-create table employee 
-(
-    id integer primary key  autoincrement,
-    name varchar,
-    age integer not null on conflict replace default 18
-);
+  插入值为```null```时默认值无法生效, 解决方法有两种: 1、如果实体类是data class, 那么我们可以代码层面为字段设置默认值. 2、
+  创建表时对默认值列使用```on conflict replace```, 请参考下面的SQL语句
 
--- addAll生成语句, age插入null后会使用默认值:18
-insert into "employee" (id, name, age) values (null, 'name', null);
+
+```SQL
+create table employee
+(
+  id   integer primary key autoincrement,
+  age  integer not null on conflict replace default 18,
+  name varchar,
+  job  varchar   
+);
 ```
-通过```on conflict replace```语句, 会在插入时自动将```null```自动替换成字段默认值, 不过缺点就是这个字段必须是```not null```
+```kotlin
+// 使用addAll批量插入
+database.employees.addAll(
+  listOf(
+    Employee(id=null, age=null, name="jack", job=null),
+    Employee(id=null, age=null, name="luck", job=null),
+  )
+)
+```
+```SQL
+-- addAll生成SQL
+insert into employee(id, age, name, job)
+values (null, null, 'jack', null),
+       (null, null, 'luck', null);
+```
+插入结果:
+
+| id  | age | name | job  |
+|-----|-----|------|------|
+| 1   | 18  | jack | null |
+| 2   | 18  | luck | null |
+
+通过```on conflict replace```语句, 会在插入时自动将```null```自动替换成列默认值, 不过缺点就是此列必须是```not null```
 
 ## 什么是字段未赋值
 
-在ktorm中, 字段已赋值和字段未赋值对生成的SQL会有不同的影响. 只有基于```Entity```接口的实体类, 才有字段未赋值的概念, 具体请参考下面的代码 
+在ktorm中, 字段已赋值和字段未赋值对生成的SQL会有不同的影响. 只有基于```Entity```接口的实体类, 才有字段未赋值的概念, 具体请参考下面的代码
 
 ```kotlin
 @Table
@@ -201,9 +258,9 @@ public interface Department : Entity<Department> {
 
 // ktorm-ksp生成的伪构造函数
 public fun Department(
-  id: Int? = Undefined.of(),
-  name: String? = Undefined.of(),
-  mixedCase: String? = Undefined.of()
+    id: Int? = Undefined.of(),
+    name: String? = Undefined.of(),
+    mixedCase: String? = Undefined.of()
 ) {
     // 省略具体代码实现
 }
@@ -219,7 +276,7 @@ val department2 = Department()
 department2.id = 1
 
 // 使用伪构造函数创建实例并传入id参数, 此时id字段为已赋值, 其他字段均为未赋值
-val department3 = Department(id=1)
+val department3 = Department(id = 1)
 ```
 
 
