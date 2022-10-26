@@ -225,7 +225,7 @@ When to use the ```default``` keyword?
 Because the ```default``` keyword is not supported in SQLite, use ```null``` to insert the
 ```unassigned property``` in the bulk insert statement
 
-How to make the ``column default value``` and ```autoincrement``` take effect when bulk inserting?
+How to make the ```column default value``` and ```autoincrement``` take effect when bulk inserting?
 
 - autoincrement
 
