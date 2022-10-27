@@ -80,7 +80,7 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
         if (table.ktormEntityType == KtormEntityType.ENTITY_INTERFACE || table.columns.any { it.isNullable }) {
             add(
                 """
-                fun <T : Any> %T.setOrDefaultValue(column: %T<T>, value: T?) {
+                fun <T : Any> %T.setOrDefaultValue(column: %T<T>, value: T?, nullAsDefaultValue: Boolean) {
                     if (nullAsDefaultValue && value == null) {
                         set(column, column.%M())
                     } else {
@@ -110,7 +110,7 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
                     column.propertyTypeName.copy(nullable = true)
                 }
                 addStatement(
-                    "setOrDefaultValue(it.%N,·entity.getColumnValue(it.%N.binding!!) as %T)",
+                    "setOrDefaultValue(it.%N,·entity.getColumnValue(it.%N.binding!!) as %T,·nullAsDefaultValue)",
                     column.tablePropertyName.simpleName,
                     column.entityPropertyName.simpleName,
                     valueType
@@ -118,7 +118,7 @@ public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
             } else {
                 val valueCode = CodeFactory.buildColumnValueCode(column)
                 if (column.isNullable) {
-                    addStatement("setOrDefaultValue(it.%N,·%L)", column.tablePropertyName.simpleName, valueCode)
+                    addStatement("setOrDefaultValue(it.%N,·%L,·nullAsDefaultValue)", column.tablePropertyName.simpleName, valueCode)
                 } else {
                     addStatement("set(it.%N,·%L)", column.tablePropertyName.simpleName, valueCode)
                 }
