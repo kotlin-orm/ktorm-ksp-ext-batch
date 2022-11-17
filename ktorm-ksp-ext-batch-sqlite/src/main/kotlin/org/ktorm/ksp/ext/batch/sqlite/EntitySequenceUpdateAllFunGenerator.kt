@@ -18,10 +18,10 @@ package org.ktorm.ksp.ext.batch.sqlite
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import org.ktorm.entity.EntitySequence
-import org.ktorm.ksp.codegen.TableGenerateContext
-import org.ktorm.ksp.codegen.TopLevelFunctionGenerator
-import org.ktorm.ksp.codegen.definition.ColumnDefinition
-import org.ktorm.ksp.codegen.definition.TableDefinition
+import org.ktorm.ksp.spi.TableGenerateContext
+import org.ktorm.ksp.spi.TopLevelFunctionGenerator
+import org.ktorm.ksp.spi.definition.ColumnDefinition
+import org.ktorm.ksp.spi.definition.TableDefinition
 
 public class EntitySequenceUpdateAllFunGenerator : TopLevelFunctionGenerator {
 

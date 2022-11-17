@@ -17,7 +17,7 @@
 package org.ktorm.ksp.ext.batch.postgresql
 
 import com.squareup.kotlinpoet.CodeBlock
-import org.ktorm.ksp.codegen.definition.ColumnDefinition
+import org.ktorm.ksp.spi.definition.ColumnDefinition
 
 public object CodeFactory {
 

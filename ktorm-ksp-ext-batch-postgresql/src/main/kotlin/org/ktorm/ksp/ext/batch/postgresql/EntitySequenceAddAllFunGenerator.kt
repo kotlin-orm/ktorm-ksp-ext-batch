@@ -20,10 +20,10 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import org.ktorm.dsl.AssignmentsBuilder
 import org.ktorm.entity.EntityExtensionsApi
 import org.ktorm.entity.EntitySequence
-import org.ktorm.ksp.codegen.TableGenerateContext
-import org.ktorm.ksp.codegen.TopLevelFunctionGenerator
-import org.ktorm.ksp.codegen.definition.KtormEntityType
-import org.ktorm.ksp.codegen.definition.TableDefinition
+import org.ktorm.ksp.spi.TableGenerateContext
+import org.ktorm.ksp.spi.TopLevelFunctionGenerator
+import org.ktorm.ksp.spi.definition.KtormEntityType
+import org.ktorm.ksp.spi.definition.TableDefinition
 import org.ktorm.schema.Column
 
 public class EntitySequenceAddAllFunGenerator : TopLevelFunctionGenerator {
